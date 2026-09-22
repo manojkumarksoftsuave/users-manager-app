@@ -9,36 +9,107 @@ on:
 
 jobs:
 
-  build:
+  build-and-deploy:
 
     runs-on: ubuntu-latest
 
 
     steps:
 
+    # Checkout source code
     - name: Checkout Code
       uses: actions/checkout@v4
 
 
+
+    # Setup Node
     - name: Setup Node.js
       uses: actions/setup-node@v4
       with:
         node-version: 20
 
 
+
+    # Frontend install
     - name: Install Frontend Dependencies
       run: |
         cd client
         npm install
 
 
+
+    # Frontend build
     - name: Build Frontend
       run: |
         cd client
         npm run build
 
 
+
+    # Backend dependency validation
     - name: Install Backend Dependencies
       run: |
         cd server
         npm install
+
+
+
+    # Deploy application to EC2
+    - name: Deploy Application to EC2
+      uses: appleboy/ssh-action@v1.0.3
+
+      with:
+
+        host: ${{ secrets.EC2_HOST }}
+
+        username: ${{ secrets.EC2_USERNAME }}
+
+        key: ${{ secrets.EC2_SSH_KEY }}
+
+
+        script: |
+
+          echo "Starting deployment"
+
+
+          cd /opt/users-manager-app
+
+
+          echo "Pulling latest code"
+
+          git pull origin main
+
+
+
+          echo "Building React application"
+
+          cd client
+
+          npm install
+
+          npm run build
+
+
+
+          echo "Restarting backend"
+
+
+          cd ../server
+
+          npm install
+
+
+          pm2 restart all || pm2 start server.js --name users-manager-api
+
+
+
+          echo "Reloading nginx"
+
+
+          sudo nginx -t
+
+          sudo systemctl reload nginx
+
+
+
+          echo "Deployment completed successfully"
