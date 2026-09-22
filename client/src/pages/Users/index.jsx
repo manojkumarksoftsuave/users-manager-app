@@ -14,6 +14,7 @@ export default function Users() {
             <div className='h1-container'>
                 <img src={Logo} alt='React Logo' />
                 <h1>Users</h1>
+                <h2>Manage your users here</h2>
             </div>
 
             <div className='add-user-container'>
