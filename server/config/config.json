@@ -1,9 +1,9 @@
 {
     "development": {
-        "username": "root",
-        "password": "",
-        "database": "node_mysql",
-        "host": "localhost",
+        "username": "user_manager",
+        "password": "Mano2002@",
+        "database": "user_manager_db",
+        "host": "0.0.0.0",
         "dialect": "mysql",
         "migrationStorage": "sequelize",
         "migrationStorageTableName": "sequelize_meta"

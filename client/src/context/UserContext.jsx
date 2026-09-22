@@ -2,7 +2,7 @@ import axios from "axios";
 import { createContext, useEffect, useState } from "react";
 
 export const UserContext = createContext();
-export const BACKEND_URL = "http://localhost:3000/api/users";
+export const BACKEND_URL = "/api/users";
 
 const UserContextProvider = ({ children }) => {
     const [users, setUsers] = useState(null);
